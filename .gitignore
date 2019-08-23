@@ -1,2 +1,4 @@
 RpnCalcNET/bin/
 RpnCalcNET/obj/
+packages/
+.vs/
