@@ -34,12 +34,12 @@ namespace RpnCalcNET
             Assert.That(calculator.Calculate(expression) == 6);
         }
 
-        [Test(Description = "Divide two numbers works")]
-        public void DivideTwoNumbersThenTruncated()
+        [Test(Description = "Divide two numbers returns decimal")]
+        public void DivideTwoNumbersReturnsDecimal()
         {
             RpnCalculator calculator = new RpnCalculator();
-            string expression = "4 3 /";
-            Assert.That(calculator.Calculate(expression) == Decimal.Truncate(4/3));
+            string expression = "1 2 /";
+            Assert.That(calculator.Calculate(expression) == (decimal)0.5);
         }
 
         [Test(Description = "Complex operation works")]
@@ -64,6 +64,70 @@ namespace RpnCalcNET
             RpnCalculator calculator = new RpnCalculator();
             string expression = "";
             Assert.Throws(typeof(ArgumentNullException), delegate { calculator.Calculate(expression); });
+        }
+
+        [Test]
+        public void InputIsDecimalThenReturnDecimal()
+        {
+            RpnCalculator calculator = new RpnCalculator();
+            string expression = "1 3 /";
+            Assert.That(calculator.Calculate(expression) == (decimal)0.333);
+        }
+
+        [Test]
+        public void ReturnThreePrecisionPoints()
+        {
+            RpnCalculator calculator = new RpnCalculator();
+            string expression = "2.000 3 /";
+            Assert.That(calculator.Calculate(expression) == (decimal)0.667);
+        }
+
+        [Test]
+        public void InputIsComplexNumberThenReturnThreePrecisionPoints()
+        {
+            RpnCalculator calculator = new RpnCalculator();
+            string expression = "2 3 / 2.21 *";
+            Assert.That(calculator.Calculate(expression) == (decimal)1.473);
+        }
+
+        [Test]
+        public void InputHasPercentageOperator()
+        {
+            RpnCalculator calculator = new RpnCalculator();
+            string expression = "10 %";
+            Assert.That(calculator.Calculate(expression) == (decimal)0.1);
+        }
+
+        [Test]
+        public void InputHasComplexPercentageOperator()
+        {
+            RpnCalculator calculator = new RpnCalculator();
+            string expression = "1 10 % +";
+            Assert.That(calculator.Calculate(expression) == (decimal)1.1);
+        }
+
+        [Test]
+        public void InputHasDecimalComplexPercentageOperator()
+        {
+            RpnCalculator calculator = new RpnCalculator();
+            string expression = "3.76 25.5 % -";
+            Assert.That(calculator.Calculate(expression) == (decimal)3.505);
+        }
+
+        [Test]
+        public void InputHasFactorialOperator()
+        {
+            RpnCalculator calculator = new RpnCalculator();
+            string expression = "4 !";
+            Assert.That(calculator.Calculate(expression) == (decimal)24);
+        }
+
+        [Test]
+        public void InputHasDecimalFactorialOperator()
+        {
+            RpnCalculator calculator = new RpnCalculator();
+            string expression = "2.2 !";
+            Assert.Throws(typeof(ArgumentOutOfRangeException), delegate { calculator.Calculate(expression); });
         }
     }
 }

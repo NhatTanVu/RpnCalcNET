@@ -13,7 +13,10 @@ namespace RpnCalcNET
         public const string MINUS = "-";
         public const string MULTIPLY = "*";
         public const string DIVIDE = "/";
-        public readonly string[] OPERATORS = new string[] { PLUS, MINUS, MULTIPLY, DIVIDE };
+        public const string PERCENTAGE = "%";
+        public const string FACTORIAL = "!";
+        public readonly string[] OPERATORS = new string[] {
+            PLUS, MINUS, MULTIPLY, DIVIDE, PERCENTAGE, FACTORIAL };
 
         public decimal Calculate(string expression)
         {
@@ -33,21 +36,35 @@ namespace RpnCalcNET
                 else
                 {
                     decimal secondNumber = numberStack.Pop();
-                    decimal firstNumber = numberStack.Pop();
-                    decimal answer = 0;
+                    decimal firstNumber = 0, answer = 0;
 
                     switch (element) {
                         case PLUS:
+                            firstNumber = numberStack.Pop();
                             answer = firstNumber + secondNumber;
                             break;
                         case MINUS:
+                            firstNumber = numberStack.Pop();
                             answer = firstNumber - secondNumber;
                             break;
                         case MULTIPLY:
+                            firstNumber = numberStack.Pop();
                             answer = firstNumber * secondNumber;
                             break;
                         case DIVIDE:
-                            answer = Decimal.Truncate(firstNumber / secondNumber);
+                            firstNumber = numberStack.Pop();
+                            answer = firstNumber / secondNumber;
+                            break;
+                        case PERCENTAGE:
+                            answer = secondNumber / 100;
+                            break;
+                        case FACTORIAL:
+                            var temp = 1;
+                            if (!((secondNumber % 1) == 0))
+                                throw new ArgumentOutOfRangeException();
+                            for (int j = 1; j <= secondNumber; j++)
+                                temp *= j;
+                            answer = temp;
                             break;
                     }
 
@@ -56,6 +73,7 @@ namespace RpnCalcNET
             }
 
             decimal result = numberStack.Pop();
+            result = Decimal.Round(result, 3);
             return result;
         }
     }
