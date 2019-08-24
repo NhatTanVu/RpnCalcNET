@@ -10,7 +10,7 @@ namespace RpnCalcNET
     [TestFixture]
     public class RpnCalculatorTests
     {
-        [Test(Description = "Plus two numbers works")]
+        [Test]
         public void PlusTwoNumbersWorks()
         {
             RpnCalculator calculator = new RpnCalculator();
@@ -18,7 +18,7 @@ namespace RpnCalcNET
             Assert.That(calculator.Calculate(expression) == 3);
         }
 
-        [Test(Description = "Minus two numbers works")]
+        [Test]
         public void MinusTwoNumbersWorks()
         {
             RpnCalculator calculator = new RpnCalculator();
@@ -26,7 +26,7 @@ namespace RpnCalcNET
             Assert.That(calculator.Calculate(expression) == -1);
         }
 
-        [Test(Description = "Multiply two numbers works")]
+        [Test]
         public void MultiplyTwoNumbersWorks()
         {
             RpnCalculator calculator = new RpnCalculator();
@@ -34,23 +34,23 @@ namespace RpnCalcNET
             Assert.That(calculator.Calculate(expression) == 6);
         }
 
-        [Test(Description = "Divide two numbers returns decimal")]
-        public void DivideTwoNumbersReturnsDecimal()
+        [Test]
+        public void DivideTwoNumbersWorks()
         {
             RpnCalculator calculator = new RpnCalculator();
             string expression = "1 2 /";
             Assert.That(calculator.Calculate(expression) == (decimal)0.5);
         }
 
-        [Test(Description = "Complex operation works")]
-        public void ComplexOperationWorks()
+        [Test]
+        public void ComplexExpressionWorks()
         {
             RpnCalculator calculator = new RpnCalculator();
             string expression = "15 7 1 1 + - / 3 * 2 1 1 + + -";
             Assert.That(calculator.Calculate(expression) == 5);
         }
 
-        [Test(Description = "Null expression then throws exception")]
+        [Test]
         public void NullExpressionThenThrowException()
         {
             RpnCalculator calculator = new RpnCalculator();
@@ -58,7 +58,7 @@ namespace RpnCalcNET
             Assert.Throws(typeof(ArgumentNullException), delegate { calculator.Calculate(expression); });
         }
 
-        [Test(Description = "Empty expression then throws exception")]
+        [Test]
         public void EmptyExpressionThenThrowException()
         {
             RpnCalculator calculator = new RpnCalculator();
@@ -67,7 +67,7 @@ namespace RpnCalcNET
         }
 
         [Test]
-        public void InputIsDecimalThenReturnDecimal()
+        public void ReturnThreePrecisionPointsWithoutRoundUp()
         {
             RpnCalculator calculator = new RpnCalculator();
             string expression = "1 3 /";
@@ -75,7 +75,7 @@ namespace RpnCalcNET
         }
 
         [Test]
-        public void ReturnThreePrecisionPoints()
+        public void ReturnThreePrecisionPointsWithRoundUp()
         {
             RpnCalculator calculator = new RpnCalculator();
             string expression = "2.000 3 /";
@@ -83,7 +83,7 @@ namespace RpnCalcNET
         }
 
         [Test]
-        public void InputIsComplexNumberThenReturnThreePrecisionPoints()
+        public void ComplexExpressionReturnThreePrecisionPoints()
         {
             RpnCalculator calculator = new RpnCalculator();
             string expression = "2 3 / 2.21 *";
@@ -91,7 +91,7 @@ namespace RpnCalcNET
         }
 
         [Test]
-        public void InputHasPercentageOperator()
+        public void PercentageOperatorWorks()
         {
             RpnCalculator calculator = new RpnCalculator();
             string expression = "10 %";
@@ -99,7 +99,7 @@ namespace RpnCalcNET
         }
 
         [Test]
-        public void InputHasComplexPercentageOperator()
+        public void ComplexExpressionAndPercentageOperatorWorks()
         {
             RpnCalculator calculator = new RpnCalculator();
             string expression = "1 10 % +";
@@ -107,7 +107,7 @@ namespace RpnCalcNET
         }
 
         [Test]
-        public void InputHasDecimalComplexPercentageOperator()
+        public void ComplexExpressionAndDecimalPercentageOperatorWorks()
         {
             RpnCalculator calculator = new RpnCalculator();
             string expression = "3.76 25.5 % -";
@@ -123,11 +123,19 @@ namespace RpnCalcNET
         }
 
         [Test]
-        public void InputHasDecimalFactorialOperator()
+        public void DecimalFactorialOperatorThenThrowException()
         {
             RpnCalculator calculator = new RpnCalculator();
             string expression = "2.2 !";
             Assert.Throws(typeof(ArgumentOutOfRangeException), delegate { calculator.Calculate(expression); });
+        }
+
+        [Test]
+        public void DecimalExponentialOperatorWorks()
+        {
+            RpnCalculator calculator = new RpnCalculator();
+            string expression = "2.2 3 ^";
+            Assert.That(calculator.Calculate(expression) == (decimal)10.648);
         }
     }
 }

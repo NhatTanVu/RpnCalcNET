@@ -9,15 +9,7 @@ namespace RpnCalcNET
     public class RpnCalculator
     {
         public const char SEPARATOR = ' ';
-        public const string PLUS = "+";
-        public const string MINUS = "-";
-        public const string MULTIPLY = "*";
-        public const string DIVIDE = "/";
-        public const string PERCENTAGE = "%";
-        public const string FACTORIAL = "!";
-        public readonly string[] OPERATORS = new string[] {
-            PLUS, MINUS, MULTIPLY, DIVIDE, PERCENTAGE, FACTORIAL };
-
+        
         public decimal Calculate(string expression)
         {
             if (string.IsNullOrEmpty(expression))
@@ -29,45 +21,13 @@ namespace RpnCalcNET
             for(int i = 0; i < elements.Length; i++)
             {
                 string element = elements[i];
-                if (!OPERATORS.Contains(element))
+                if (!OperatorFactory.OPERATORS.Contains(element))
                 {
                     numberStack.Push(decimal.Parse(element));
                 }
                 else
                 {
-                    decimal secondNumber = numberStack.Pop();
-                    decimal firstNumber = 0, answer = 0;
-
-                    switch (element) {
-                        case PLUS:
-                            firstNumber = numberStack.Pop();
-                            answer = firstNumber + secondNumber;
-                            break;
-                        case MINUS:
-                            firstNumber = numberStack.Pop();
-                            answer = firstNumber - secondNumber;
-                            break;
-                        case MULTIPLY:
-                            firstNumber = numberStack.Pop();
-                            answer = firstNumber * secondNumber;
-                            break;
-                        case DIVIDE:
-                            firstNumber = numberStack.Pop();
-                            answer = firstNumber / secondNumber;
-                            break;
-                        case PERCENTAGE:
-                            answer = secondNumber / 100;
-                            break;
-                        case FACTORIAL:
-                            var temp = 1;
-                            if (!((secondNumber % 1) == 0))
-                                throw new ArgumentOutOfRangeException();
-                            for (int j = 1; j <= secondNumber; j++)
-                                temp *= j;
-                            answer = temp;
-                            break;
-                    }
-
+                    decimal answer = new OperatorFactory().CreateOperator(element).Calculate(ref numberStack);
                     numberStack.Push(answer);
                 }
             }
